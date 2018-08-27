@@ -1,5 +1,9 @@
 # Schemaum
 
+## Install
+
+`composer require roger-russel/schemaum`
+
 ## API
 
 ```
