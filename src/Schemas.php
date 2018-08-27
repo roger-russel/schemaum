@@ -1,12 +1,12 @@
 <?php
 
-namespace EntropyMigration\Laravel;
+namespace Schemaum;
 
 use Exception;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-Class Schemaum {
+Class Schemas {
 
   protected static function getTableList($databaseLike, $tableLike) {
 
