@@ -10,16 +10,19 @@ Class Schemas {
 
   protected static function getTableList($databaseLike, $tableLike) {
 
+    $databaseLike = addslashes($databaseLike);
+    $tableLike = addslashes($tableLike);
+
     $query = "SELECT
                 table_schema,
                 table_name
               FROM
                 information_schema.tables
               WHERE
-                    table_schema LIKE {$databaseLike}
-                AND table_name LIKE {$tableLike}";
+                    table_schema LIKE '{$databaseLike}'
+                AND table_name LIKE '{$tableLike}'";
 
-    return DB::unprepared($query);
+    return DB::select($query);
 
   }
 
@@ -32,19 +35,17 @@ Class Schemas {
 
       try {
 
-        if($previus !==  $list['table_schema'])
-          DB::unprepared('USE ' . $list['table_schema']);
+        if($previus !==  $list->table_schema)
+          DB::unprepared('USE ' . $list->table_schema);
 
-        Schema::table($list['table_name'], $callback);
-        $previus = $list['table_schema'];
+        Schema::table($list->table_name, $callback);
+        $previus = $list->table_schema;
 
       } catch( Exception $e ) {
 
-        echo $list['table_schema'] . '.' . $list['table_name'] . ' error:' . $e->getMessage() . PHP_EOL;
+        echo $list->table_schema . '.' . $list->table_name . ' error:' . $e->getMessage() . PHP_EOL;
 
       }
-
     }
-
   }
 }
