@@ -26,7 +26,7 @@ Class Schemas {
 
   }
 
-  public static function table($databaseLike, $tableLike, $callback){
+  public static function iterate($databaseLike, $tableLike, $callback, $abortOnFirstError = false){
 
     $tableList = self::getTableList($databaseLike, $tableLike);
     $previus = '';
@@ -38,14 +38,27 @@ Class Schemas {
         if($previus !==  $list->table_schema)
           DB::unprepared('USE ' . $list->table_schema);
 
-        Schema::table($list->table_name, $callback);
+        $callback($list->table_schema, $list->table_name);
         $previus = $list->table_schema;
 
       } catch( Exception $e ) {
 
         echo $list->table_schema . '.' . $list->table_name . ' error:' . $e->getMessage() . PHP_EOL;
 
+        if($abortOnFirstError)
+          throw $e;
+
       }
     }
+  }
+
+  public static function table($databaseLike, $tableLike, $callback){
+    self::iterate($databaseLike, $tableLike, function($tableSchema, $tableName, $abortOnFirstError = false){
+      Schema::table($table_name, $callback);
+    });
+  }
+
+  public static function unprepared($databaseLike, $tableLike, $callback, $abortOnFirstError = false){
+    self::iterate($databaseLike, $tableLike, $callback, $abortOnFirstError);
   }
 }
