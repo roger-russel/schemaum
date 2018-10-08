@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 Class Schemas {
 
-  protected static function getTableList($databaseLike, $tableLike) {
+  public static function getTableList($databaseLike, $tableLike) {
 
     $databaseLike = addslashes($databaseLike);
     $tableLike = addslashes($tableLike);
